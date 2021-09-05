@@ -42,3 +42,9 @@ runs:
           done
           ansible-vault decrypt hosts --vault-password-file ./var_secret
       shell: bash
+    - name: Run Ansible Playbook
+      run: |
+          cd ${{ env.$GITHUB_WORKSPACE }}/${{ inputs.ansible-env-path }}
+          export ANSIBLE_HOST_KEY_CHECKING=False
+          ansible-playbook -i hosts playbook.yml
+      shell: bash

@@ -1,0 +1,44 @@
+name: 'Ansible Action'
+description: 'Runs ansible'
+inputs:
+  ansible-vault-password:  # id of input
+    description: 'Key to decrypt ansible secrets'
+    required: true
+    default: ''
+  ansible-env-path:  # /var/lib/zerotier-one/authtoken.secret
+    description: 'Ansible env path'
+    required: true
+    default: ''
+  ansible-version:
+    description: 'Ansible Version'
+    required: true
+    default: ''
+runs:
+  using: "composite"
+  steps:
+    - name: Mask Secrets
+      run: |
+          echo "::add-mask::${{ inputs.ansible-vault-password }}"
+      shell: bash
+    - name: Install Prerequisite
+      run: |
+          sudo apt-get update
+          sudo apt-get -y install python3-pip
+      shell: bash
+    - name: Install Ansible
+      run: |
+          pip3 install ansible==${{ inputs.ansible-version }}
+      shell: bash
+    - name: Set Ansible Secret
+      run: |
+          echo ${{ inputs.ansible-vault-password }} > ${{ env.GITHUB_WORKSPACE  }}/${{ inputs.ansible-env-path }}/var_secret
+      shell: bash
+    - name: Decrypt Variables
+      run: |
+          cd ${{ env.$GITHUB_WORKSPACE }}/${{ inputs.ansible-env-path }}
+          for file in ./group_vars/*
+          do
+            ansible-vault decrypt "$file" --vault-password-file ./var_secret
+          done
+          ansible-vault decrypt hosts --vault-password-file ./var_secret
+      shell: bash

@@ -1,6 +1,6 @@
 ## Ansible Builder for Github Actions
 
-Allows for you to use an encrypted Ansible environment in a Github Action.
+Allows for you to run an encrypted ansible playbook/env in a Github Action.
 
 ## Config
 ### `ansible-vault-password`

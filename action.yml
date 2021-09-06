@@ -1,11 +1,11 @@
 name: 'Ansible Action'
 description: 'Runs ansible'
 inputs:
-  ansible-vault-password:  # id of input
+  ansible-vault-password:
     description: 'Key to decrypt ansible secrets'
     required: true
     default: ''
-  ansible-env-path:  # /var/lib/zerotier-one/authtoken.secret
+  ansible-env-path:
     description: 'Ansible env path'
     required: true
     default: ''

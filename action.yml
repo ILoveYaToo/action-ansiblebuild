@@ -31,11 +31,11 @@ runs:
       shell: bash
     - name: Set Ansible Secret
       run: |
-          echo ${{ inputs.ansible-vault-password }} > ${{ env.GITHUB_WORKSPACE  }}/${{ inputs.ansible-env-path }}/var_secret
+          echo ${{ inputs.ansible-vault-password }} > ${{ github.workspace }}/${{ inputs.ansible-env-path }}/var_secret
       shell: bash
     - name: Decrypt Variables
       run: |
-          cd ${{ env.GITHUB_WORKSPACE }}/${{ inputs.ansible-env-path }}
+          cd ${{ github.workspace }}/${{ inputs.ansible-env-path }}
           for file in ./group_vars/*
           do
             ansible-vault decrypt "$file" --vault-password-file ./var_secret
@@ -44,7 +44,7 @@ runs:
       shell: bash
     - name: Run Ansible Playbook
       run: |
-          cd ${{ env.GITHUB_WORKSPACE }}/${{ inputs.ansible-env-path }}
+          cd ${{ github.workspace }}/${{ inputs.ansible-env-path }}
           export ANSIBLE_HOST_KEY_CHECKING=False
           ansible-playbook -i hosts playbook.yml
       shell: bash
